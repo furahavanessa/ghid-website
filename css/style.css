@@ -577,3 +577,6 @@ ul.ticks li::before{content:"";position:absolute;left:0;top:1px;width:22px;heigh
 .form-note.ok{background:color-mix(in srgb,var(--green) 12%,transparent)}
 .form-note.err{background:color-mix(in srgb,#C2185B 10%,transparent)}
 .btn-send[disabled]{opacity:.65;cursor:progress}
+
+.pay-detail{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;padding-top:12px;border-top:1px dashed var(--line);font-size:13.5px;color:var(--muted)}
+.soon{font-style:normal;font:700 12px var(--display);letter-spacing:.04em;padding:5px 10px;border-radius:999px;background:var(--ochre-soft);color:var(--ink);border:1px solid color-mix(in srgb,var(--ochre) 45%,transparent)}
