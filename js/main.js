@@ -125,7 +125,7 @@
 
   // zoom on hover for every photo (not the logo, hero background, partner logos or the lightbox)
   document.querySelectorAll('main img').forEach(img=>{
-    if(img.closest('.logo-badge,.partners-marquee,.lightbox,.zoom')||img.classList.contains('hero-bg')) return;
+    if(img.closest('.logo-badge,.partners-marquee,.lightbox,.zoom,.hero-pano')||img.classList.contains('hero-bg')) return;
     const cs=getComputedStyle(img), z=document.createElement('span'); z.className='zoom';
     z.style.borderRadius=cs.borderRadius;
     if(img.parentNode.classList.contains('ph')) z.style.height='100%';
