@@ -124,7 +124,7 @@
     const alias={partnership:'funding',support:'funding',implementation:'funding',volunteer:'general',training:'general'};
     let q=new URLSearchParams(location.search).get('subject'); if(q){q=alias[q]||q; if(subj.querySelector('option[value="'+q+'"]')) subj.value=q}
   }
-  document.querySelectorAll('[data-goto-subject]').forEach(a=>a.href='contact.html?subject='+a.dataset.gotoSubject+'#contact-form');
+  document.querySelectorAll('[data-goto-subject]').forEach(a=>a.href='/contact?subject='+a.dataset.gotoSubject+'#contact-form');
 
   // copy
   document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{

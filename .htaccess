@@ -1,6 +1,29 @@
 # GHID website – Apache settings (DirectAdmin)
 DirectoryIndex index.html
-Options -Indexes
+Options -Indexes -MultiViews
+
+# Clean addresses: ghidcongo.org/contact instead of ghidcongo.org/contact.html
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # /about/  ->  /about   (keeps styles and images working)
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+  # /index.html or /index  ->  /
+  RewriteCond %{THE_REQUEST} \s/index(\.html)?[\s?] [NC]
+  RewriteRule ^ / [R=301,L]
+
+  # old addresses /contact.html  ->  /contact   (old links and Google keep working)
+  RewriteCond %{THE_REQUEST} \s/([^.?\s]+)\.html[\s?] [NC]
+  RewriteRule ^ /%1 [R=301,L]
+
+  # /contact  ->  shows contact.html
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+  RewriteRule ^([^./]+)$ $1.html [L]
+</IfModule>
 
 # Speed: let browsers keep images, styles and scripts for a while
 <IfModule mod_expires.c>

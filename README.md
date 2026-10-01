@@ -63,6 +63,11 @@ Content shown in a yellow dashed box still needs real information:
    (the files `index.html`, `contact.php`, `.htaccess` and the folders `css`, `js`, `img` must sit directly in `public_html`).
 3. Open the site. That's it: it is plain HTML, CSS and JavaScript, plus `contact.php` for the form.
 
+**Clean addresses.** `.htaccess` shows pages as `ghidcongo.org/contact` instead of `contact.html`
+(old `.html` links redirect automatically). Links inside the site use `/contact`, `/about`… so,
+to preview the site on your own computer, open it through a local server rather than double-clicking `index.html`.
+`.htaccess` is a hidden file: in File Manager make sure it was extracted too.
+
 ## Contact form
 
 `contact.html` sends messages to **info@ghidcongo.org** through `contact.php`, using the server's own mail system,
