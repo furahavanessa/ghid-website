@@ -12,7 +12,7 @@ img{max-width:100%}
   --basalt:#0A4A22; --on-basalt:#EEF7F0; --on-basalt-muted:#B8D6C0;
   --display:"Montserrat","Segoe UI",Arial,sans-serif;
   --body:"Open Sans","Segoe UI",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  --radius:10px; --wrap:1180px;
+  --radius:10px; --wrap:1600px;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   color-scheme:dark;
@@ -35,7 +35,7 @@ html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6}
 a{color:var(--green)}
 a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--ochre);outline-offset:2px}
-.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:clamp(16px,4vw,40px)}
+.wrap{max-width:var(--wrap);margin-inline:auto;padding-inline:clamp(16px,3vw,48px)}
 h1,h2,h3,.display{font-family:var(--display);line-height:1.1;letter-spacing:-.02em;text-wrap:balance;margin:0;font-weight:800}
 h1{font-size:clamp(36px,5.2vw,68px)}
 h2{font-size:clamp(28px,3.6vw,46px)}
@@ -71,25 +71,25 @@ p{margin:0}
 .logo-badge img{width:44px;height:44px}
 .brand b{font-family:var(--display);font-size:26px;font-weight:800;letter-spacing:.01em;line-height:1}
 .brand small{display:block;font-size:11px;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;font-weight:600}
-.nav{display:flex;gap:2px;margin-left:auto;align-items:center}
+.nav{display:flex;gap:2px;margin-left:auto;align-items:center;flex-shrink:0}
 .nav a{font-family:var(--display);font-size:14.5px;font-weight:600;color:var(--ink);text-decoration:none;padding:9px 11px;border-radius:8px;white-space:nowrap}
 .nav a:hover{background:var(--surface-2)}
 .nav a[aria-current="page"]{color:var(--green);box-shadow:inset 0 -2px 0 var(--green);border-radius:0}
-.tools{display:flex;gap:8px;align-items:center}
+.tools{display:flex;gap:8px;align-items:center;flex-shrink:0}
 .lang{display:flex;border:1.5px solid var(--line);border-radius:999px;overflow:hidden}
 .lang button{font:700 13px/1 var(--display);letter-spacing:.06em;background:transparent;color:var(--muted);border:0;padding:9px 11px;cursor:pointer}
 .lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
-.btn-donate{padding:11px 18px;font-size:15px}
+.btn-donate{padding:11px 18px;font-size:15px;white-space:nowrap}
 .menu-btn{display:none;background:transparent;border:1.5px solid var(--line);border-radius:10px;width:44px;height:44px;color:var(--ink);cursor:pointer}
-@media (max-width:1240px){
-  .nav{position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;background:var(--bg);border-bottom:1px solid var(--line);padding:10px clamp(16px,4vw,40px) 18px;gap:0}
-  .nav:not(.open){display:none}
-  .nav a{padding:13px 6px;border-bottom:1px solid var(--line);border-radius:0}
-  .nav a[aria-current="page"]{box-shadow:none}
-  .menu-btn{display:grid;place-items:center}
-  .tools{margin-left:auto}
-}
-@media (max-width:1500px){.brand small{display:none}}
+/* The menu turns into the ☰ button whenever the links don't fit on one line
+   (js/main.js measures it, so it works for both English and French). */
+.site-header.compact .nav{position:absolute;left:0;right:0;top:100%;flex-direction:column;align-items:stretch;background:var(--bg);border-bottom:1px solid var(--line);padding:10px clamp(16px,3vw,48px) 18px;gap:0}
+.site-header.compact .nav:not(.open){display:none}
+.site-header.compact .nav a{padding:13px 6px;border-bottom:1px solid var(--line);border-radius:0}
+.site-header.compact .nav a[aria-current="page"]{box-shadow:none}
+.site-header.compact .menu-btn{display:grid;place-items:center}
+.site-header.compact .tools{margin-left:auto}
+.site-header.no-sub .brand small{display:none}
 @media (max-width:520px){.btn-donate{display:none}}
 
 /* pages */
@@ -185,8 +185,28 @@ p{margin:0}
 @media (max-width:760px){.quotes{grid-template-columns:1fr}}
 
 /* partners */
-.partners{display:flex;flex-wrap:wrap;gap:12px}
-.partner{border:1.5px solid var(--line);border-radius:999px;padding:12px 20px;font-weight:600;background:var(--surface)}
+/* Logos scroll in a loop; hovering or touching the strip stops it. */
+.partners-marquee{--gap:20px;overflow:hidden;padding:6px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);touch-action:pan-y}
+.partners-track{display:flex;width:max-content}
+.partners-group{display:flex;flex-wrap:wrap;gap:var(--gap);list-style:none;margin:0;padding:0}
+.partners-marquee.ready .partners-group{flex-wrap:nowrap;padding-right:var(--gap)}
+.partners-marquee.ready .partners-track{animation:partners-scroll var(--dur,30s) linear infinite}
+.partners-marquee:hover .partners-track,.partners-marquee.paused .partners-track,.partners-marquee:focus-within .partners-track{animation-play-state:paused}
+@keyframes partners-scroll{to{transform:translateX(-50%)}}
+.partner{flex:none;display:grid;place-items:center;height:96px;min-width:190px;padding:14px 26px;border:1.5px solid var(--line);border-radius:var(--radius);background:#fff;font-weight:600;color:#13241A;text-align:center;cursor:default;transition:border-color .2s,transform .2s}
+.partner:hover{border-color:var(--green);transform:translateY(-2px)}
+.partner-dark.has-logo{background:#0A4A22;border-color:#0A4A22} /* for logos that are white */
+.partner img{display:none;max-height:64px;max-width:160px;width:auto;object-fit:contain}
+.partner.has-logo img{display:block}
+.partner.has-logo .partner-name{display:none}
+@media (max-width:560px){.partner{height:80px;min-width:150px;padding:12px 18px}.partner img{max-height:52px;max-width:124px}}
+@media (prefers-reduced-motion:reduce){.partners-marquee.ready .partners-track{animation:none}.partners-marquee.ready .partners-group{flex-wrap:wrap}.partners-marquee.ready .partners-group[aria-hidden]{display:none}}
+
+/* Image zoom on hover (every content photo) */
+.zoom{display:block;overflow:hidden;position:relative}
+.zoom>img{display:block;transition:transform .6s cubic-bezier(.2,.7,.2,1);will-change:transform}
+@media (hover:hover){.zoom:hover>img{transform:scale(1.12)}}
+@media (prefers-reduced-motion:reduce){.zoom>img{transition:none}}
 
 /* CTA band */
 .cta{background:var(--green-deep);color:#fff}

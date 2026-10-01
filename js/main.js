@@ -8,6 +8,20 @@
   const nav=document.getElementById('nav'), menuBtn=document.getElementById('menu-btn');
   menuBtn.addEventListener('click',()=>{const o=nav.classList.toggle('open');menuBtn.setAttribute('aria-expanded',String(o))});
 
+  // show the ☰ menu only when the links don't fit (French labels are longer)
+  const header=document.querySelector('.site-header'), bar=header&&header.querySelector('.bar');
+  function fitNav(){
+    if(!bar) return;
+    // 1) everything on one line  2) drop the long subtitle  3) switch to the ☰ menu
+    const over=()=>bar.scrollWidth>bar.clientWidth+1;
+    header.classList.remove('compact','no-sub');
+    if(over()) header.classList.add('no-sub');
+    if(over()) header.classList.add('compact');
+    else{nav.classList.remove('open');menuBtn.setAttribute('aria-expanded','false')}
+  }
+  addEventListener('resize',fitNav);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fitNav);
+
 
   // team social links (edit js/team-links.js)
   const TEAM_LINKS=window.TEAM_LINKS||{};
@@ -43,6 +57,7 @@
     root.setAttribute('data-lang',l);
     document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===l)));
     try{localStorage.setItem('ghid-lang',l)}catch(e){}
+    fitNav();
   }
   let saved='en'; try{saved=localStorage.getItem('ghid-lang')||'en'}catch(e){}
   setLang(saved);
@@ -82,6 +97,40 @@
   lb.addEventListener('click',e=>{if(e.target===lb)close()});
   document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
   }
+
+  // partner logos: endless scrolling strip, stops on hover or touch
+  (function(){
+    const m=document.getElementById('partners'); if(!m) return;
+    const group=m.querySelector('.partners-group');
+    const track=document.createElement('div'); track.className='partners-track';
+    group.parentNode.insertBefore(track,group); track.appendChild(group);
+    const base=[...group.children];
+    function build(){
+      // repeat the logos until one set is wider than the strip, then copy the set once more
+      m.classList.add('ready');
+      [...track.querySelectorAll('.partners-group[aria-hidden]')].forEach(g=>g.remove());
+      [...group.children].slice(base.length).forEach(li=>li.remove());
+      let guard=0;
+      while(group.scrollWidth<m.clientWidth+40 && guard++<20) base.forEach(li=>{const c=li.cloneNode(true);c.setAttribute('aria-hidden','true');group.appendChild(c)});
+      const copy=group.cloneNode(true); copy.setAttribute('aria-hidden','true'); track.appendChild(copy);
+      m.style.setProperty('--dur',Math.max(18,group.scrollWidth/55)+'s');
+    }
+    build();
+    let w=m.clientWidth; addEventListener('resize',()=>{if(Math.abs(m.clientWidth-w)>40){w=m.clientWidth;build()}});
+    track.addEventListener('load',build,true); // logos change the width once they load
+    // touch: tap the strip to stop it, tap again (or anywhere else) to start it
+    m.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse')m.classList.toggle('paused')});
+    document.addEventListener('pointerdown',e=>{if(e.pointerType!=='mouse'&&!m.contains(e.target))m.classList.remove('paused')});
+  })();
+
+  // zoom on hover for every photo (not the logo, hero background, partner logos or the lightbox)
+  document.querySelectorAll('main img').forEach(img=>{
+    if(img.closest('.logo-badge,.partners-marquee,.lightbox,.zoom')||img.classList.contains('hero-bg')) return;
+    const cs=getComputedStyle(img), z=document.createElement('span'); z.className='zoom';
+    z.style.borderRadius=cs.borderRadius;
+    if(img.parentNode.classList.contains('ph')) z.style.height='100%';
+    img.parentNode.insertBefore(z,img); z.appendChild(img);
+  });
 
   // counters
   const nums=[...document.querySelectorAll('.hero-stats .num')];

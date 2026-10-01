@@ -34,6 +34,7 @@ ghid-site/
 | Change text on a page              | the page's `.html` file. English is in `<span class="en">`, French in `<span class="fr">` – change both. |
 | Change colours or fonts            | `css/style.css` (colours are at the top, in `:root`) |
 | Add a team member's social links   | `js/team-links.js` |
+| Add or change a partner logo       | put the logo (PNG, ideally transparent) in `img/partners/` named `pole-institute.webp`, `international-alert.svg`, `yale-model-african-union.png` or `kofi-annan-foundation.svg` (the names and formats `index.html` expects). The Yale logo is white, so its tile has a dark green background. Until a file is there, the partner's name is shown. To add a partner, copy one `<li class="partner">` line in `index.html`. |
 | Replace a photo                    | put the new photo in `img/` with the same name, or change the `src="img/…"` in the page |
 | Change the menu or footer          | the header and footer are repeated in every `.html` file – change all 7 |
 

@@ -150,11 +150,15 @@
         <p class="eyebrow"><span class="en">Partners &amp; networks</span><span class="fr">Partenaires et réseaux</span></p>
         <h2><span class="en">We work alongside</span><span class="fr">Ils travaillent avec nous</span></h2>
       </div>
-      <div class="partners">
-        <span class="partner">Pole Institute</span>
-        <span class="partner">International Alert</span>
-        <span class="partner">Yale Model African Union</span>
-        <span class="partner">Kofi Annan Foundation</span>
+      <!-- Partner logos: put each logo in img/partners/ with the file name used below.
+           Until a logo file is there, the partner's name is shown instead. -->
+      <div class="partners-marquee" id="partners">
+        <ul class="partners-group">
+          <li class="partner"><img src="img/partners/pole-institute.webp" alt="Pole Institute" onload="this.parentNode.classList.add('has-logo')"><span class="partner-name">Pole Institute</span></li>
+          <li class="partner"><img src="img/partners/international-alert.svg" alt="International Alert" onload="this.parentNode.classList.add('has-logo')"><span class="partner-name">International Alert</span></li>
+          <li class="partner partner-dark"><img src="img/partners/yale-model-african-union.png" alt="Yale Model African Union" onload="this.parentNode.classList.add('has-logo')"><span class="partner-name">Yale Model African Union</span></li>
+          <li class="partner"><img src="img/partners/kofi-annan-foundation.svg" alt="Kofi Annan Foundation" onload="this.parentNode.classList.add('has-logo')"><span class="partner-name">Kofi Annan Foundation</span></li>
+        </ul>
       </div>
     </div>
   </section>
