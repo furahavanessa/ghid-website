@@ -117,6 +117,14 @@
     note.hidden=false; btn.disabled=false;
   });
 
+  // document requests by email to info@ghidcongo.org
+  document.querySelectorAll('[data-mail-en]').forEach(a=>a.addEventListener('click',()=>{
+    const fr=root.getAttribute('data-lang')==='fr', doc=fr?a.dataset.mailFr:a.dataset.mailEn;
+    const subject=fr?'Demande de document : '+doc:'Document request: '+doc;
+    const body=fr?'Bonjour GHID,\n\nPourriez-vous m’envoyer votre '+doc+' ?\n\nMerci,\n':'Hello GHID,\n\nCould you please send me your '+doc+'?\n\nThank you,\n';
+    a.href='mailto:info@ghidcongo.org?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  }));
+
   // contact: choose the subject from the cards above the form, or from ?subject= in the link
   const subj=document.getElementById('c-subject');
   if(subj){
