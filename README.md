@@ -56,24 +56,18 @@ Content shown in a yellow dashed box still needs real information:
 - portfolio projects, news articles and downloadable reports
 - the contact, volunteer and newsletter forms are not yet connected to an inbox
 
+## Hosting on DirectAdmin
+
+1. In DirectAdmin open **File Manager** → `domains/ghidcongo.org/public_html`.
+2. Delete the default `index.html` there (if any), then **Upload** the zip and **Extract** it in `public_html`
+   (the files `index.html`, `contact.php`, `.htaccess` and the folders `css`, `js`, `img` must sit directly in `public_html`).
+3. Open the site. That's it: it is plain HTML, CSS and JavaScript, plus `contact.php` for the form.
+
 ## Contact form
 
-The form on `contact.html` sends messages to **info@ghidcongo.org** through `api/contact.js` (a Vercel function).
-**Never put the email password in the code**: the code is public on GitHub.
+`contact.html` sends messages to **info@ghidcongo.org** through `contact.php`, using the server's own mail system,
+so **no password is stored anywhere**. Just make sure the mailbox exists:
+DirectAdmin → **E-mail Manager → E-mail Accounts** → `info@ghidcongo.org`.
 
-Set it once in Vercel instead:
-
-1. Open the project on vercel.com → **Settings** → **Environment Variables**.
-2. Add these variables (for Production, Preview and Development):
-
-| Name        | Value |
-|-------------|-------|
-| `SMTP_HOST` | the outgoing mail server of ghidcongo.org (e.g. `mail.ghidcongo.org`; your email host gives it) |
-| `SMTP_PORT` | `465` (or `587` if your host says so) |
-| `SMTP_USER` | `info@ghidcongo.org` |
-| `SMTP_PASS` | the mailbox password |
-| `MAIL_TO`   | optional, defaults to `info@ghidcongo.org` |
-
-3. Go to **Deployments** → **⋯** on the latest one → **Redeploy**.
-
-Replying to a message in your mailbox answers the visitor directly. Until the variables are set, visitors see a link to email you instead.
+To send to another address, change `$TO` at the top of `contact.php`.
+If sending fails, visitors see a link to email info@ghidcongo.org directly, so no message is lost.

@@ -1,0 +1,25 @@
+# GHID website – Apache settings (DirectAdmin)
+DirectoryIndex index.html
+Options -Indexes
+
+# Speed: let browsers keep images, styles and scripts for a while
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpeg "access plus 7 days"
+  ExpiresByType image/png "access plus 7 days"
+  ExpiresByType image/webp "access plus 7 days"
+  ExpiresByType image/svg+xml "access plus 7 days"
+  ExpiresByType image/x-icon "access plus 30 days"
+  ExpiresByType text/css "access plus 1 day"
+  ExpiresByType application/javascript "access plus 1 day"
+</IfModule>
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript image/svg+xml application/json
+</IfModule>
+AddType image/webp .webp
+AddType application/manifest+json .webmanifest
+
+# Hide project files that are not part of the site
+<FilesMatch "^(README\.md|package(-lock)?\.json|vercel\.json)$">
+  Require all denied
+</FilesMatch>

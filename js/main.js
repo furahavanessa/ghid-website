@@ -95,7 +95,7 @@
   document.querySelectorAll('[data-wa-text-en]').forEach(a=>a.addEventListener('click',()=>{
     a.href='https://wa.me/'+WA+'?text='+encodeURIComponent(root.getAttribute('data-lang')==='fr'?a.dataset.waTextFr:a.dataset.waTextEn);
   }));
-  // contact form: sent by the server to info@ghidcongo.org (see api/contact.js)
+  // contact form: sent by contact.php to info@ghidcongo.org
   const cf=document.getElementById('contact-form');
   if(cf) cf.addEventListener('submit',async e=>{
     e.preventDefault();
@@ -105,7 +105,7 @@
     data.topicLabel=cf.querySelector('#c-subject').selectedOptions[0].textContent;
     btn.disabled=true; note.hidden=true; note.className='form-note';
     try{
-      const r=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+      const r=await fetch('contact.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
       if(!r.ok) throw new Error(r.status);
       cf.reset(); note.classList.add('ok');
       note.textContent=t('Thank you! Your message has been sent. We usually reply within a few working days.','Merci ! Votre message a bien été envoyé. Nous répondons généralement sous quelques jours ouvrables.');

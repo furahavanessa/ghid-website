@@ -1,8 +1,0 @@
-{
-  "name": "ghid-website",
-  "private": true,
-  "description": "Green Hope Initiative for Development website. Static pages plus one function (api/contact.js) that emails the contact form.",
-  "dependencies": {
-    "nodemailer": "^6.9.16"
-  }
-}
