@@ -572,3 +572,8 @@ ul.ticks li::before{content:"";position:absolute;left:0;top:1px;width:22px;heigh
 .cta-box h2{font-size:clamp(24px,2.6vw,34px);color:#fff}
 .cta-box p{color:var(--on-basalt-muted);margin-top:8px;max-width:52ch}
 .cta-pro{padding-top:0}
+
+.hp{position:absolute!important;left:-9999px;width:1px;height:1px;overflow:hidden} /* spam trap, hidden from people */
+.form-note.ok{background:color-mix(in srgb,var(--green) 12%,transparent)}
+.form-note.err{background:color-mix(in srgb,#C2185B 10%,transparent)}
+.btn-send[disabled]{opacity:.65;cursor:progress}

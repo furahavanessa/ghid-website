@@ -95,11 +95,34 @@
   document.querySelectorAll('[data-wa-text-en]').forEach(a=>a.addEventListener('click',()=>{
     a.href='https://wa.me/'+WA+'?text='+encodeURIComponent(root.getAttribute('data-lang')==='fr'?a.dataset.waTextFr:a.dataset.waTextEn);
   }));
+  // contact form: sent by the server to info@ghidcongo.org (see api/contact.js)
+  const cf=document.getElementById('contact-form');
+  if(cf) cf.addEventListener('submit',async e=>{
+    e.preventDefault();
+    if(!cf.checkValidity()){cf.reportValidity();return}
+    const btn=cf.querySelector('.btn-send'), note=cf.querySelector('.form-note');
+    const data=Object.fromEntries(new FormData(cf)); data.lang=root.getAttribute('data-lang')||'en';
+    data.topicLabel=cf.querySelector('#c-subject').selectedOptions[0].textContent;
+    btn.disabled=true; note.hidden=true; note.className='form-note';
+    try{
+      const r=await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+      if(!r.ok) throw new Error(r.status);
+      cf.reset(); note.classList.add('ok');
+      note.textContent=t('Thank you! Your message has been sent. We usually reply within a few working days.','Merci ! Votre message a bien été envoyé. Nous répondons généralement sous quelques jours ouvrables.');
+    }catch(err){
+      note.classList.add('err');
+      const body=encodeURIComponent(data.topicLabel+'\n\n'+data.message+'\n\n— '+data.name+' ('+data.email+')');
+      note.innerHTML=t('Sorry, the message could not be sent right now. Please ','Désolé, le message n’a pas pu être envoyé pour le moment. Merci de ')+'<a href="mailto:info@ghidcongo.org?subject='+encodeURIComponent('[GHID] '+data.topicLabel)+'&body='+body+'">'+t('email us directly','nous écrire directement')+'</a>.';
+    }
+    note.hidden=false; btn.disabled=false;
+  });
+
   // contact: choose the subject from the cards above the form, or from ?subject= in the link
   const subj=document.getElementById('c-subject');
   if(subj){
     document.querySelectorAll('[data-subject]').forEach(a=>a.addEventListener('click',()=>{subj.value=a.dataset.subject}));
-    const q=new URLSearchParams(location.search).get('subject'); if(q) subj.value=q;
+    const alias={partnership:'funding',support:'funding',implementation:'funding',volunteer:'general',training:'general'};
+    let q=new URLSearchParams(location.search).get('subject'); if(q){q=alias[q]||q; if(subj.querySelector('option[value="'+q+'"]')) subj.value=q}
   }
   document.querySelectorAll('[data-goto-subject]').forEach(a=>a.href='contact.html?subject='+a.dataset.gotoSubject+'#contact-form');
 

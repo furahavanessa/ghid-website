@@ -55,3 +55,25 @@ Content shown in a yellow dashed box still needs real information:
 - organisation email address and social media links
 - portfolio projects, news articles and downloadable reports
 - the contact, volunteer and newsletter forms are not yet connected to an inbox
+
+## Contact form
+
+The form on `contact.html` sends messages to **info@ghidcongo.org** through `api/contact.js` (a Vercel function).
+**Never put the email password in the code**: the code is public on GitHub.
+
+Set it once in Vercel instead:
+
+1. Open the project on vercel.com → **Settings** → **Environment Variables**.
+2. Add these variables (for Production, Preview and Development):
+
+| Name        | Value |
+|-------------|-------|
+| `SMTP_HOST` | the outgoing mail server of ghidcongo.org (e.g. `mail.ghidcongo.org`; your email host gives it) |
+| `SMTP_PORT` | `465` (or `587` if your host says so) |
+| `SMTP_USER` | `info@ghidcongo.org` |
+| `SMTP_PASS` | the mailbox password |
+| `MAIL_TO`   | optional, defaults to `info@ghidcongo.org` |
+
+3. Go to **Deployments** → **⋯** on the latest one → **Redeploy**.
+
+Replying to a message in your mailbox answers the visitor directly. Until the variables are set, visitors see a link to email you instead.
