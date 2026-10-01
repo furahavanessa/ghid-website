@@ -61,15 +61,22 @@
     <p class="eyebrow"><span class="en">Our programs</span><span class="fr">Nos programmes</span></p>
     <h1><span class="en">Integrated action for resilient communities</span><span class="fr">Des actions intégrées pour des communautés résilientes</span></h1>
     <p class="lead"><span class="en">Conflict, poverty, climate change, health crises and exclusion are deeply linked, so no single problem can be solved alone. Our four programs put young people, women and vulnerable communities at the centre of change in eastern DR Congo.</span><span class="fr">Conflits, pauvreté, changements climatiques, crises sanitaires et exclusion sont profondément liés : aucun défi ne se règle isolément. Nos quatre programmes placent les jeunes, les femmes et les communautés vulnérables au cœur du changement dans l'Est de la RDC.</span></p>
-    <nav class="prog-nav" aria-label="Programs">
-      <a href="programs.html#p-peace"><span class="en">Peace &amp; leadership</span><span class="fr">Paix et leadership</span></a>
-      <a href="programs.html#p-econ"><span class="en">Economic empowerment</span><span class="fr">Autonomisation</span></a>
-      <a href="programs.html#p-env"><span class="en">Environment &amp; climate</span><span class="fr">Environnement et climat</span></a>
-      <a href="programs.html#p-health"><span class="en">Health communication</span><span class="fr">Communication et santé</span></a>
-    </nav>
+    <div class="prog-cards">
+      <a class="prog-card" data-prog="peace" href="#p-peace"><svg><use href="#i-peace"/></svg><b><span class="en">Peace &amp; leadership</span><span class="fr">Paix et leadership</span></b><small><span class="en">Building leaders for lasting peace</span><span class="fr">Construire des leaders pour une paix durable</span></small><span class="go"><span class="en">Discover</span><span class="fr">Découvrir</span> →</span></a>
+      <a class="prog-card" data-prog="econ" href="#p-econ"><svg><use href="#i-rise"/></svg><b><span class="en">Economic empowerment</span><span class="fr">Autonomisation</span></b><small><span class="en">Turning young people's potential into lasting opportunities</span><span class="fr">Transformer le potentiel des jeunes en opportunités durables</span></small><span class="go"><span class="en">Discover</span><span class="fr">Découvrir</span> →</span></a>
+      <a class="prog-card" data-prog="env" href="#p-env"><svg><use href="#i-leaf"/></svg><b><span class="en">Environment &amp; climate</span><span class="fr">Environnement et climat</span></b><small><span class="en">Restore today to protect tomorrow</span><span class="fr">Restaurer aujourd'hui pour préserver demain</span></small><span class="go"><span class="en">Discover</span><span class="fr">Découvrir</span> →</span></a>
+      <a class="prog-card" data-prog="health" href="#p-health"><svg><use href="#i-health"/></svg><b><span class="en">Health communication</span><span class="fr">Communication et santé</span></b><small><span class="en">Inform to protect, communicate to save lives</span><span class="fr">Informer pour protéger, communiquer pour sauver des vies</span></small><span class="go"><span class="en">Discover</span><span class="fr">Découvrir</span> →</span></a>
+    </div>
   </div></section>
 
-  <section class="program" id="p-peace"><div class="wrap">
+  <nav class="prog-tabs" aria-label="Programs"><div class="wrap">
+    <a data-prog="peace" href="#p-peace"><svg><use href="#i-peace"/></svg><span class="en">Peace &amp; leadership</span><span class="fr">Paix et leadership</span></a>
+    <a data-prog="econ" href="#p-econ"><svg><use href="#i-rise"/></svg><span class="en">Economic empowerment</span><span class="fr">Autonomisation</span></a>
+    <a data-prog="env" href="#p-env"><svg><use href="#i-leaf"/></svg><span class="en">Environment &amp; climate</span><span class="fr">Environnement et climat</span></a>
+    <a data-prog="health" href="#p-health"><svg><use href="#i-health"/></svg><span class="en">Health communication</span><span class="fr">Communication et santé</span></a>
+  </div><span class="bar-progress"></span></nav>
+
+  <section class="program" id="p-peace" data-prog="peace"><div class="wrap">
     <div class="program-head"><svg><use href="#i-peace"/></svg><div><h2><span class="en">Peace &amp; leadership</span><span class="fr">Paix et leadership</span></h2><p class="tagline"><span class="en">Building leaders for lasting peace</span><span class="fr">« Construire des leaders pour bâtir une paix durable »</span></p></div></div>
     <div class="prog-grid">
       <div class="col">
@@ -97,7 +104,7 @@
     </div>
   </div></section>
 
-  <section class="program" id="p-econ"><div class="wrap">
+  <section class="program" id="p-econ" data-prog="econ"><div class="wrap">
     <div class="program-head"><svg><use href="#i-rise"/></svg><div><h2><span class="en">Economic empowerment</span><span class="fr">Autonomisation socio-économique</span></h2><p class="tagline"><span class="en">Turning young people's potential into lasting opportunity</span><span class="fr">« Transformer le potentiel des jeunes en opportunités durables »</span></p></div></div>
     <div class="prog-grid">
       <div class="col">
@@ -122,7 +129,7 @@
     </div>
   </div></section>
 
-  <section class="program" id="p-env"><div class="wrap">
+  <section class="program" id="p-env" data-prog="env"><div class="wrap">
     <div class="program-head"><svg><use href="#i-leaf"/></svg><div><h2><span class="en">Environment &amp; climate</span><span class="fr">Environnement et changement climatique</span></h2><p class="tagline"><span class="en">Restore today to protect tomorrow</span><span class="fr">« Restaurer aujourd'hui pour préserver demain »</span></p></div></div>
     <div class="prog-grid">
       <div class="col">
@@ -149,7 +156,7 @@
     </div>
   </div></section>
 
-  <section class="program" id="p-health"><div class="wrap">
+  <section class="program" id="p-health" data-prog="health"><div class="wrap">
     <div class="program-head"><svg><use href="#i-health"/></svg><div><h2><span class="en">Health communication</span><span class="fr">Communication et santé</span></h2><p class="tagline"><span class="en">Inform to protect, communicate to save lives</span><span class="fr">« Informer pour protéger, communiquer pour sauver des vies »</span></p></div></div>
     <div class="prog-grid">
       <div class="col">

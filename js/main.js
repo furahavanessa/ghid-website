@@ -132,6 +132,41 @@
     img.parentNode.insertBefore(z,img); z.appendChild(img);
   });
 
+  // programs page: highlight the tab of the program on screen + reading progress
+  (function(){
+    const tabs=[...document.querySelectorAll('.prog-tabs a')]; if(!tabs.length) return;
+    const secs=tabs.map(a=>document.querySelector(a.getAttribute('href')));
+    const bar=document.querySelector('.prog-tabs .bar-progress');
+    function update(){
+      const y=innerHeight*0.35; let cur=0;
+      secs.forEach((s,i)=>{if(s.getBoundingClientRect().top<y)cur=i});
+      tabs.forEach((t,i)=>t.classList.toggle('active',i===cur));
+      const a=secs[0].getBoundingClientRect().top+scrollY, z=secs[secs.length-1].getBoundingClientRect().bottom+scrollY-innerHeight;
+      if(bar) bar.style.setProperty('--p',Math.min(1,Math.max(0,(scrollY-a+200)/(z-a+200))));
+      const act=tabs[cur]; if(act&&act.parentNode.scrollWidth>act.parentNode.clientWidth){const p=act.parentNode;p.scrollLeft=act.offsetLeft-p.clientWidth/2+act.offsetWidth/2}
+    }
+    addEventListener('scroll',update,{passive:true}); addEventListener('resize',update); update();
+  })();
+
+  // reveal blocks as they scroll into view, and count up program results
+  (function(){
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window)) return;
+    const els=document.querySelectorAll('.program-head,.program .block,.program .results,.program img,.value-card,.prog-card');
+    const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}}),{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+    els.forEach((el,i)=>{
+      if(el.getBoundingClientRect().top<innerHeight) return; // already on screen: leave as is
+      el.classList.add('reveal'); el.style.transitionDelay=(el.matches('.value-card,.prog-card')?(i%3)*90:0)+'ms'; io.observe(el);
+    });
+    const nums=[...document.querySelectorAll('.program .res b:not(.todo)')];
+    const cio=new IntersectionObserver(es=>es.forEach(en=>{
+      if(!en.isIntersecting) return; cio.unobserve(en.target);
+      const el=en.target, txt=el.dataset.final||el.textContent, end=parseInt(txt.replace(/[^0-9]/g,''),10), plus=txt.trim().endsWith('+')?'+':'';
+      el.dataset.final=txt; if(!end) return; const t0=performance.now();
+      (function step(n){const p=Math.min(1,(n-t0)/1400),v=Math.round(end*(1-Math.pow(1-p,3)));el.textContent=v.toLocaleString('en-US')+(p===1?plus:'');if(p<1)requestAnimationFrame(step)})(t0);
+    }),{threshold:.6});
+    nums.forEach(n=>cio.observe(n));
+  })();
+
   // counters
   const nums=[...document.querySelectorAll('.hero-stats .num')];
   if(!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window){
