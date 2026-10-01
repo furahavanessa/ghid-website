@@ -57,6 +57,7 @@
     root.setAttribute('data-lang',l);
     document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===l)));
     try{localStorage.setItem('ghid-lang',l)}catch(e){}
+    document.querySelectorAll('option[data-fr]').forEach(o=>o.textContent=l==='fr'?o.dataset.fr:o.dataset.en);
     fitNav();
   }
   let saved='en'; try{saved=localStorage.getItem('ghid-lang')||'en'}catch(e){}
@@ -64,12 +65,43 @@
   document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
   const t=(en,fr)=>root.getAttribute('data-lang')==='fr'?fr:en;
 
-  // forms (preview: not connected)
-  document.querySelectorAll('.demo-form').forEach(f=>f.addEventListener('submit',e=>{
-    e.preventDefault(); const n=f.querySelector('.form-note');
-    n.textContent=t('Thank you! This form is not yet connected to an inbox, so nothing was sent. Please reach us on WhatsApp: +243 995 781 106.','Merci ! Ce formulaire n\'est pas encore relié à une boîte de réception : rien n\'a été envoyé. Contactez-nous sur WhatsApp : +243 995 781 106.');
-    n.hidden=false;
+  // forms: compose the message and open it in WhatsApp (email as a fallback)
+  const WA='243995781106', MAIL='manararogerisrael@gmail.com';
+  const lbl=el=>{const l=el.closest('label'); if(!l) return el.name||''; const s=l.querySelector(':scope > span'); const v=s&&(s.querySelector(root.getAttribute('data-lang')==='fr'?'.fr':'.en')||s); return (v?v.textContent:'').replace('*','').trim()};
+  document.querySelectorAll('.send-form').forEach(f=>f.addEventListener('submit',e=>{
+    e.preventDefault();
+    if(!f.checkValidity()){f.reportValidity();return}
+    const fr=root.getAttribute('data-lang')==='fr';
+    const lines=[fr?f.dataset.titleFr:f.dataset.titleEn,''];
+    f.querySelectorAll('input,select,textarea').forEach(el=>{
+      const v=el.tagName==='SELECT'?el.options[el.selectedIndex].textContent:el.value.trim();
+      if(v) lines.push(lbl(el)+' : '+v);
+    });
+    const text=lines.join('\n');
+    const mail=f.querySelector('[data-mail-link]');
+    if(mail) mail.href='mailto:'+MAIL+'?subject='+encodeURIComponent(lines[0])+'&body='+encodeURIComponent(text);
+    window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(text),'_blank','noopener');
+    const n=f.querySelector('.form-note');
+    if(n){n.textContent=t('Your message is ready in WhatsApp: just press send. If WhatsApp did not open, use the email link above.','Votre message est prêt dans WhatsApp : il suffit d’appuyer sur Envoyer. Si WhatsApp ne s’est pas ouvert, utilisez le lien e-mail ci-dessus.');n.hidden=false}
   }));
+  // newsletter (footer): subscribe by email
+  document.querySelectorAll('.demo-form').forEach(f=>f.addEventListener('submit',e=>{
+    e.preventDefault(); const n=f.querySelector('.form-note'); const em=f.querySelector('input[type=email]');
+    const sub=t('Newsletter subscription','Inscription à la newsletter');
+    location.href='mailto:'+MAIL+'?subject='+encodeURIComponent(sub)+'&body='+encodeURIComponent(sub+' : '+(em?em.value:''));
+    if(n){n.textContent=t('Thank you! Your email app opens so you can confirm your subscription.','Merci ! Votre messagerie s’ouvre pour confirmer votre inscription.');n.hidden=false}
+  }));
+  // buttons that open WhatsApp with a ready-made sentence
+  document.querySelectorAll('[data-wa-text-en]').forEach(a=>a.addEventListener('click',()=>{
+    a.href='https://wa.me/'+WA+'?text='+encodeURIComponent(root.getAttribute('data-lang')==='fr'?a.dataset.waTextFr:a.dataset.waTextEn);
+  }));
+  // contact: choose the subject from the cards above the form, or from ?subject= in the link
+  const subj=document.getElementById('c-subject');
+  if(subj){
+    document.querySelectorAll('[data-subject]').forEach(a=>a.addEventListener('click',()=>{subj.value=a.dataset.subject}));
+    const q=new URLSearchParams(location.search).get('subject'); if(q) subj.value=q;
+  }
+  document.querySelectorAll('[data-goto-subject]').forEach(a=>a.href='contact.html?subject='+a.dataset.gotoSubject+'#contact-form');
 
   // copy
   document.querySelectorAll('.copy').forEach(b=>b.addEventListener('click',()=>{
@@ -165,6 +197,18 @@
       (function step(n){const p=Math.min(1,(n-t0)/1400),v=Math.round(end*(1-Math.pow(1-p,3)));el.textContent=v.toLocaleString('en-US')+(p===1?plus:'');if(p<1)requestAnimationFrame(step)})(t0);
     }),{threshold:.6});
     nums.forEach(n=>cio.observe(n));
+  })();
+
+  // count-up numbers on portfolio and other pages
+  (function(){
+    const els=[...document.querySelectorAll('main [data-count]:not(.num)')];
+    if(!els.length||matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window)) return;
+    const io=new IntersectionObserver(es=>es.forEach(en=>{
+      if(!en.isIntersecting) return; io.unobserve(en.target);
+      const el=en.target,end=+el.dataset.count,plus=('plus' in el.dataset)||el.textContent.trim().endsWith('+')?'+':'',t0=performance.now();
+      (function step(n){const p=Math.min(1,(n-t0)/1400),v=Math.round(end*(1-Math.pow(1-p,3)));el.textContent=v.toLocaleString('en-US')+(p===1?plus:'');if(p<1)requestAnimationFrame(step)})(t0);
+    }),{threshold:.6});
+    els.forEach(e=>io.observe(e));
   })();
 
   // counters
